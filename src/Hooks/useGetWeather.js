@@ -13,7 +13,7 @@ export const useGetWeather = () => {
   const fetchWeatherData = async () => {
     try {
       const res = await fetch(
-        `http://api.openweathermap.org/data/2.5/forecast?lat=44.39&lon=10.99&appid=${WEATHER_API}&uints=metric`
+        `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API}&uints=metric`
       );
 
       const data = await res.json();
@@ -27,14 +27,14 @@ export const useGetWeather = () => {
   };
   useEffect(() => {
     (async () => {
-      // let { status } = await Location.requestBackgroundPermissionsAsync;
-      // if (status !== "granted") {
-      //   setError("permission to access location was denied");
-      //   return;
-      // }
-      // let location = await Location.getCurrentPositionAsync({});
-      setLat("44.34");
-      setLon("10.99");
+      let { status } = await Location.requestBackgroundPermissionsAsync;
+      if (status !== "granted") {
+        setError("permission to access location was denied");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLat(lat);
+      setLon(lon);
       await fetchWeatherData();
     })();
   }, [lat, lon]);
